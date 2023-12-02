@@ -8,7 +8,8 @@ const ProfModel = sequelize.define('Professor',
             autoIncrement: true,
             primaryKey: true
         },
-        nome: DataTypes.STRING
+        nome: DataTypes.STRING,
+        diciplina: DataTypes.STRING
     }
 )
 module.exports = {
@@ -17,16 +18,17 @@ module.exports = {
         return prof
     },
     
-    save: async function(nome) {
+    save: async function(nome, diciplina) { 
         const Prof = await ProfModel.create({
-            nome: nome
+            nome: nome,
+            diciplina: diciplina
         })
         
         return Prof
     },
 
-    update: async function(id, nome) {
-        return await ProfModel.update({nome: nome}, {
+    update: async function(id, nome, diciplina) {
+        return await ProfModel.update({nome: nome, diciplina:diciplina}, {
             where: { codigo: id }
         })
     },
