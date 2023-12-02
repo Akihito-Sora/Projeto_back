@@ -1,5 +1,7 @@
 const {DataTypes, Op} = require("sequelize")
 const sequelize = require("../helpers/bd")
+const professor = require("./professor")
+const aluno= require("../aluno")
 
 const salaModel = sequelize.define('sala', 
     {
@@ -12,6 +14,15 @@ const salaModel = sequelize.define('sala',
 
     }
 )
+
+salaModel.belongsTo(professor.Model ,{
+    foreign_key:'Professor'
+})
+salaModel.belongsTo(aluno.Model, {
+    foreign_key:'Aluno'
+})
+
+
 module.exports = {
     list: async function() {
         const sala = await salaModel.findAll()
