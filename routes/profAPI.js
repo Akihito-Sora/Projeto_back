@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const {sucess, fail} = require("../helpers/resposta")
+const {sucess, fail} = require("../helpers/message")
 const ProfessorDAO = require("../model/professor")
 
 router.get("/", (req, res) => {

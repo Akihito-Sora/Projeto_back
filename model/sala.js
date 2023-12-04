@@ -1,9 +1,9 @@
-const {DataTypes, Op} = require("sequelize")
+const { DataTypes, Op } = require("sequelize")
 const sequelize = require("../helpers/bd")
 const professor = require("./professor")
-const aluno= require("../aluno")
+const aluno = require("../aluno")
 
-const salaModel = sequelize.define('sala', 
+const salaModel = sequelize.define('sala',
     {
         codigo: {
             type: DataTypes.INTEGER,
@@ -15,40 +15,61 @@ const salaModel = sequelize.define('sala',
     }
 )
 
-salaModel.belongsTo(professor.Model ,{
-    foreign_key:'Professor'
+salaModel.belongsTo(professor.Model, {
+    foreign_key: 'Professor'
 })
 salaModel.belongsTo(aluno.Model, {
-    foreign_key:'Aluno'
+    foreign_key: 'Aluno'
 })
 
 
 module.exports = {
-    list: async function() {
+    list: async function () {
         const sala = await salaModel.findAll()
         return sala
     },
-    
-    save: async function(numero) {
+
+    save: async function (numero, prof, student) {
+        if (prof instanceof professor.Model) {
+            prof = prof.codigo
+        } else if (typeof prof == 'string') {
+            obj = await professor.getByName(prof)
+            if (!obj) {
+                return null
+            }
+            prof = obj.codigo
+        }
+
+        if (student instanceof aluno.Model) {
+            student = student.codigo
+        } else if (typeof student == 'string') {
+            obj = await aluno.getByName(student)
+            if (!obj) {
+                return null
+            }
+            student = obj.codigo
+        }
+
+        
         const sala = await salaModel.create({
             max_aluno: numero
         })
-        
+
         return sala
     },
 
-    update: async function(id, numero) {
-        return await salaModel.update({max_aluno: numero}, {
+    update: async function (id, numero) {
+        return await salaModel.update({ max_aluno: numero }, {
             where: { codigo: id }
         })
     },
 
-    delete: async function(id) {
+    delete: async function (id) {
         //Precisa fazer algo para os livros que este autor possui
-        return await salaModel.destroy({where: { codigo: id }})
+        return await salaModel.destroy({ where: { codigo: id } })
     },
 
-    getById: async function(id) {
+    getById: async function (id) {
         return await salaModel.findByPk(id)
     },
 
