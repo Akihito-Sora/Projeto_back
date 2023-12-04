@@ -9,6 +9,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var aluno = require('./routes/alunoApi');
 var prof = require('./routes/ProfApi');
+var install = require('./routes/installAPI');
 
 
 require("./helpers/bd")
@@ -24,6 +25,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/aluno', aluno);
 app.use('/prof', prof);
+app.use('/install', install);
 
 
 // catch 404 and forward to error handler

@@ -1,7 +1,7 @@
 const { DataTypes, Op } = require("sequelize")
 const sequelize = require("../helpers/bd")
 const professor = require("./professor")
-const aluno = require("../aluno")
+const aluno = require("./aluno")
 
 const salaModel = sequelize.define('sala',
     {
@@ -18,8 +18,8 @@ const salaModel = sequelize.define('sala',
 salaModel.belongsTo(professor.Model, {
     foreign_key: 'Professor'
 })
-salaModel.belongsTo(aluno.Model, {
-    foreign_key: 'Aluno'
+salaModel.belongsToMany(aluno.Model, {
+    through: 'alunos_Sala', 
 })
 
 
@@ -52,7 +52,8 @@ module.exports = {
 
         
         const sala = await salaModel.create({
-            max_aluno: numero
+            max_aluno: numero,
+            ProfessorCodigo: prof
         })
 
         return sala
