@@ -12,7 +12,7 @@ class Prof extends Model{
             disciplina: DataTypes.STRING
         },{sequelize})
     }
-    static associations(models) {
+    static associate(models) {
         this.hasMany(models.Sala, {foreignKey: 'professor_id', as:'sala'})
     }
 }
