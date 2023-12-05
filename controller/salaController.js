@@ -1,6 +1,6 @@
 const Sala = require('../model/sala');
-//const Aluno = require('../model/aluno');
-const Professor = require('../model/professor');
+const Prof = require('../model/professor');
+const Professor = require('./professorController');
 
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
     },
 
     save: async function (numero, prof) {
-        if (prof instanceof Professor) {
+        if (prof instanceof Prof) {
             prof = prof.codigo
         } else if (typeof prof == 'string') {
             obj = await Professor.getByName(prof)
