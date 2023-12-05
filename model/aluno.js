@@ -1,50 +1,18 @@
-const {DataTypes, Op} = require("sequelize")
-const sequelize = require("../helpers/bd")
-
-const alunoModel = sequelize.define('Aluno', 
-    {
-        codigo: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        nome: DataTypes.STRING
+const {DataTypes, Model} = require("sequelize")
+class Aluno extends Model{
+    static init(sequelize){
+        super.init({
+            codigo: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            nome: DataTypes.STRING
+        }, {sequelize})
     }
-)
-module.exports = {
-    list: async function() {
-        const aluno = await alunoModel.findAll()
-        return aluno
-    },
-    
-    save: async function(nome) {
-        const aluno = await alunoModel.create({
-            nome: nome
-        })
-        
-        return aluno
-    },
-
-    update: async function(id, nome) {
-        return await alunoModel.update({nome: nome}, {
-            where: { codigo: id }
-        })
-    },
-
-    delete: async function(id) {
-        //Precisa fazer algo para os livros que este autor possui
-        return await alunoModel.destroy({where: { codigo: id }})
-    },
-
-    getById: async function(id) {
-        return await alunoModel.findByPk(id)
-    },
-
-    getByName: async function(nome) {
-        return await alunoModel.findOne({where: {nome: {
-            [Op.like]: '%' + nome + '%'
-        } }})
-    },
-
-    Model: alunoModel
+    static associate(models){
+        this.belongsToMany(models.Sala, { foreignKey: 'aluno_id', through: 'Alunos_sala', as: 'Sala' })
+    }
 }
+
+module.exports = Aluno

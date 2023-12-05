@@ -7,9 +7,10 @@ require("dotenv").config()
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var aluno = require('./routes/alunoApi');
-var prof = require('./routes/ProfApi');
-var install = require('./routes/installAPI');
+var aluno = require('./router_control/alunoAPI');
+var prof = require('./router_control/profAPI');
+var sala = require('./router_control/salaAPI');
+var install = require('./router_control/installAPI');
 
 
 require("./helpers/bd")
@@ -25,6 +26,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/aluno', aluno);
 app.use('/prof', prof);
+app.use('/sala', sala)
 app.use('/install', install);
 
 

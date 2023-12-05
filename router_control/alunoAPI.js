@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const {sucess, fail} = require("../helpers/message")
-const AlunoDAO = require("../model/aluno")
+const AlunoDAO = require("../controller/alunoController")
 
 router.get("/", (req, res) => {
     AlunoDAO.list().then((alunos) => {

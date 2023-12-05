@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const {sucess, fail} = require("../helpers/message")
-const SalaDAO = require("../model/sala")
+const SalaDAO = require("../controller/salaController")
 
 router.get("/", (req, res) => {
     SalaDAO.list().then((Salas) => {
@@ -20,9 +20,9 @@ router.get("/:id", (req, res) => {
 })
 
 router.post("/", (req, res) => {
-    const {max} = req.body
+    const {max, prof} = req.body
     
-    SalaDAO.save(max).then(Sala => {
+    SalaDAO.save(max, prof).then(Sala => {
         res.json(sucess(Sala))
     }).catch(err => {
         console.log(err)
@@ -32,11 +32,11 @@ router.post("/", (req, res) => {
 
 router.put("/:id", (req, res) => {
     const {id} = req.params
-    const {max} = req.body
+    const {max, prof } = req.body
 
     let obj = {}
     if (max) obj.max = max
-
+    if (prof) obj.prof = prof
 
     if (obj == {}) {
         return res.status(500).json(fail("Nenhum atributo foi modificado"))

@@ -2,21 +2,21 @@ const express = require("express")
 const router = express.Router()
 const sequelize = require("../helpers/bd")
 
-const professorModel = require("../model/professor")
-const alunoModel = require("../model/aluno")
-const salaModel = require("../model/sala")
+const professor = require("../controller/professorController")
+const aluno = require("../controller/alunoController")
+const sala = require("../controller/salaController")
 
 router.get('/', async (req, res) => {
     await sequelize.sync({force: true})
 
     let professores = [];
-    professores.push( await professorModel.save("teste", "matematica"))
+    professores.push( await professor.save("teste", "matematica"))
 
     let alunos =[];
-    alunos.push( await alunoModel.save("toshio") )
+    alunos.push( await aluno.save("toshio") )
 
     let salas =[];
-    salas.push(await salaModel.save(10, "teste"));
+    salas.push(await sala.save(10, "teste", "toshio"));
 
     res.json({status:true, professores: professores, alunos: alunos, salas:salas});
 })
