@@ -31,16 +31,25 @@ module.exports = {
         return sala
     },
 
-    
-
-    update: async function (id, obj) {
-        let turma = await Sala.findByPk(id)
-        if (!turma) {
+    addAlunoToSala: async function (id, aluno) {
+        const sala = this.getById(id);
+        if (!sala) {
             return false
         }
-        Object.keys(obj).forEach(key => turma[key] = obj[key])
-        await turma.save()
-        return turma
+        const student = await Student.getByName(aluno);
+        if (student) {
+            await sala.addAluno(student);
+        }
+    },
+
+    update: async function (id, obj) {
+        let sala = await Sala.findByPk(id)
+        if (!sala) {
+            return false
+        }
+        Object.keys(obj).forEach(key => sala[key] = obj[key])
+        await sala.save()
+        return sala
     },
 
     delete: async function (id) {

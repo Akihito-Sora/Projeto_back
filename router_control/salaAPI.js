@@ -34,6 +34,12 @@ router.post("/:id", (req, res) => {
     const id = req.params.id;
     const aluno = req.body.aluno;
 
+    SalaDAO.addAlunoToSala(id, aluno).then(Sala => {
+        res.json(sucess(Sala))
+    }).catch(err => {
+        console.log(err)
+        res.status(500).json(fail("Falha ao relacionar aluno"))
+    })
 })
 
 router.put("/:id", (req, res) => {
