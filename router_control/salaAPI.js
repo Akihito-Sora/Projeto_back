@@ -30,6 +30,12 @@ router.post("/", (req, res) => {
     })
 })
 
+router.post("/:id", (req, res) => {
+    const id = req.params.id;
+    const aluno = req.body.aluno;
+
+})
+
 router.put("/:id", (req, res) => {
     const {id} = req.params
     const {max, prof } = req.body

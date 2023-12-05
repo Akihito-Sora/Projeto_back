@@ -1,18 +1,20 @@
 const Prof = require('../model/professor');
+const Sala = require('../model/sala');
 const {Op} = require('sequelize');
 
 module.exports = {
     list: async function() {
-        const prof = await Prof.findAll()
+        const prof = await Prof.findAll({
+            include:[{ model: Sala, as: 'Sala' }]
+        })
         return prof
     },
     
-    save: async function(nome, diciplina) { 
+    save: async function(nome, disciplina) { 
 
         const prof = await Prof.create({
             nome: nome,
-            diciplina: diciplina,
-            //sala_id: sala_id
+            disciplina: disciplina
         })
         
         return prof

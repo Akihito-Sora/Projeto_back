@@ -13,7 +13,7 @@ class Prof extends Model{
         },{sequelize})
     }
     static associate(models) {
-        this.hasMany(models.Sala, {foreignKey: 'professor_id', as:'sala'})
+        this.hasMany(models.Sala)
     }
 }
 module.exports = Prof

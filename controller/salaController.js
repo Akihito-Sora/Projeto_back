@@ -1,42 +1,37 @@
 const Sala = require('../model/sala');
 const Prof = require('../model/professor');
+const Aluno = require('../model/aluno');
 const Professor = require('./professorController');
+const Student = require('./alunoController');
 
 
 module.exports = {
     list: async function () {
-        const sala = await Sala.findAll()
-        return sala
-    },
-
-    save: async function (numero, prof) {
-        if (prof instanceof Prof) {
-            prof = prof.codigo
-        } else if (typeof prof == 'string') {
-            obj = await Professor.getByName(prof)
-            if (!obj) {
-                return null
-            }
-            prof = obj.codigo
-        }
-/*
-        if (student instanceof Aluno) {
-            student = student.codigo
-        } else if (typeof student == 'string') {
-            obj = await Aluno.getByName(student)
-            if (!obj) {
-                return null
-            }
-            student = obj.codigo
-        }
-*/
-        const sala = await Sala.create({
-            max_aluno: numero,
-            Professor_id: prof
+        const sala = await Sala.findAll({
+            include:[
+                { model: Prof, as: 'Prof' },
+                { model: Aluno, as: 'alunos' }
+            ]
         })
-
         return sala
     },
+
+    save: async function (numero, prof, aluno) {
+        const sala = await Sala.create({
+            max_aluno: numero
+        })
+        const professor = await Professor.getByName(prof);
+        if (professor) {
+            await sala.addProf(professor);
+        }
+        const student = await Student.getByName(aluno);
+        if (student) {
+            await sala.addAluno(student);
+        }
+        return sala
+    },
+
+    
 
     update: async function (id, obj) {
         let turma = await Sala.findByPk(id)

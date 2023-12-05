@@ -1,10 +1,12 @@
-//const Sala = require('../model/sala');
+const Sala = require('../model/sala');
 const Aluno = require('../model/aluno');
 const {Op} = require('sequelize');
 
 module.exports = {
     list: async function() {
-        const aluno = await Aluno.findAll()
+        const aluno = await Aluno.findAll({
+            include:[{ model: Sala, as: 'Sala' }]
+        })
         return aluno
     },
     
