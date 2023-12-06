@@ -20,26 +20,43 @@ module.exports = {
         const sala = await Sala.create({
             max_aluno: numero
         })
+
         const professor = await Professor.getByName(prof);
-        if (professor) {
-            await sala.addProf(professor);
+        if (!professor) {
+            return false;
         }
+        await sala.addProf(professor);
+
         const student = await Student.getByName(aluno);
-        if (student) {
-            await sala.addAluno(student);
+        if (!student) {
+           return false;
         }
-        return sala
+        await sala.addAluno(student);
+
+        return sala;
     },
 
-    addAlunoToSala: async function (id, aluno) {
+    addAlunoToSala: async function (sala, aluno) {
+        const student = await Student.getByName(aluno);
+        if (!student) {
+            return false;
+        }
+        const turma = await Sala.getById(sala.codigo)
+        await turma.addAluno(student);
+        return turma;
+    },
+
+    removeAluno: async function (id, aluno) {
         const sala = this.getById(id);
         if (!sala) {
-            return false
+            return false;
         }
         const student = await Student.getByName(aluno);
-        if (student) {
-            await sala.addAluno(student);
+        if (!student) {
+            return false;
         }
+        await sala.removeAluno(student);
+        return sala;
     },
 
     update: async function (id, obj) {
@@ -58,5 +75,9 @@ module.exports = {
 
     getById: async function (id) {
         return await Sala.findByPk(id)
+    },
+    getNumAlunos: async function(sala){
+        let num = await sala.countAlunos();
+        return num;
     }
 }

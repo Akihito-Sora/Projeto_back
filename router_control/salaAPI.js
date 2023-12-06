@@ -30,11 +30,33 @@ router.post("/", (req, res) => {
     })
 })
 
-router.post("/:id", (req, res) => {
+router.post("/:id/add_aluno", (req, res) => {
     const id = req.params.id;
     const aluno = req.body.aluno;
 
-    SalaDAO.addAlunoToSala(id, aluno).then(Sala => {
+    const sala = SalaDAO.getById(id)
+    if (sala){
+        const num = SalaDAO.getNumAlunos(sala)
+        if (num < sala.max_aluno) { 
+            SalaDAO.addAlunoToSala(sala, aluno).then(Sala => {
+                res.json(sucess(Sala))
+            }).catch(err => {
+                console.log(err)
+                res.status(500).json(fail("Falha ao relacionar aluno"))
+            })
+        }else {
+            res.status(500).json(fail("Quantidade maxima de alunos na sala Atingida"));
+        }
+    }else {
+        res.status(500).json(fail("Sala não encontrada"));
+    }
+})
+
+router.delete('/:id/remove_aluno', (req, res) => {
+    const id = req.params.id;
+    const aluno = req.body.aluno;
+
+    SalaDAO.removeAluno(id, aluno).then(Sala => {
         res.json(sucess(Sala))
     }).catch(err => {
         console.log(err)

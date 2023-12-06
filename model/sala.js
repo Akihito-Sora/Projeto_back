@@ -14,6 +14,9 @@ class Sala extends Model {
         this.belongsTo(models.Prof)
         this.belongsToMany(models.Aluno, {foreignKey: 'sala_id', through: 'Alunos_sala', as: 'alunos'})
     }
+    addProf(professor) {
+        return this.setProf(professor);
+    }
 }
 
 module.exports = Sala
