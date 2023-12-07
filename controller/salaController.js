@@ -13,10 +13,17 @@ module.exports = {
                 { model: Aluno, as: 'alunos', through:{attributes:[]} },
             ]
         })
-        return sala
+        let lista= [];
+        let cont = (pag-1)*lim;
+        for ( i = 0; i < lim && cont < aluno.length; i++) {
+            lista[i] = sala[cont]
+            cont++;
+        }
+
+        return lista
     },
 
-    save: async function (numero, prof, aluno) {
+    save: async function (numero, prof) {
         const sala = await Sala.create({
             max_aluno: numero
         })
@@ -26,12 +33,6 @@ module.exports = {
             return false;
         }
         await sala.addProf(professor);
-
-        const student = await Student.getByName(aluno);
-        if (!student) {
-           return false;
-        }
-        await sala.addAluno(student);
 
         return sala;
     },

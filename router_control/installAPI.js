@@ -10,8 +10,7 @@ const sala = require("../controller/salaController")
 
 router.post('/', async (req, res) => {
     await sequelize.sync({force: true})
-    await User.save("user", "senha")
-
+    
     let professores = [];
     professores.push( await professor.save("teste", "matematica"))
 
@@ -19,7 +18,11 @@ router.post('/', async (req, res) => {
     alunos.push( await aluno.save("toshio") )
 
     let salas =[];
-    salas.push(await sala.save(10, "teste", "toshio"));
+    salas.push(await sala.save(10, "teste", ""));
+
+    let user = await User.save("user", "senha")
+    await User.acesso(user.codigo)
+
 
     res.json({status:true, professores: professores, alunos: alunos, salas:salas});
 })

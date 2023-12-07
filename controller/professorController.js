@@ -3,11 +3,18 @@ const Sala = require('../model/sala');
 const {Op} = require('sequelize');
 
 module.exports = {
-    list: async function() {
+    list: async function(lim, pag) {
         const prof = await Prof.findAll({
             include:[{ model: Sala }]
         })
-        return prof
+        let lista= [];
+        let cont = (pag-1)*lim;
+        for ( i = 0; i < lim && cont < aluno.length; i++) {
+            lista[i] = prof[cont]
+            cont++;
+        }
+
+        return lista
     },
     
     save: async function(nome, disciplina) { 

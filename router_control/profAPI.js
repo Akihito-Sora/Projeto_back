@@ -4,17 +4,22 @@ var router = express.Router();
 const {sucess, fail} = require("../helpers/message")
 const ProfessorDAO = require("../controller/professorController")
 
-router.get("/", (req, res) => {
-    ProfessorDAO.list().then((Professores) => {
-        res.json(sucess(Professores, "list"))
-    })
+router.get("/:lim/:pag", (req, res) => {
+    const {lim, pag} = req.params
+    if (lim == 5 || lim == 10 || lim == 30) {
+        ProfessorDAO.list(lim,pag).then((Professores) => {
+            res.json(sucess(Professores, "list"))
+        })
+    }else{
+        res.json(fail("Limite deve ser 5 ou 10 ou 30"));
+    }
 })
 
 router.get("/:id", (req, res) => {
     ProfessorDAO.getById(req.params.id).then(Professor => {
         res.json(sucess(Professor))
     }).catch(err => {
-        consol.elog(err)
+        console.log(err)
         res.status(500).json(fail("Não foi possível localizar o Professor"))
     })
 })

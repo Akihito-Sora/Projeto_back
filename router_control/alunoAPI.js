@@ -5,17 +5,22 @@ const Auth = require('../helpers/auth');
 const {sucess, fail} = require("../helpers/message")
 const AlunoDAO = require("../controller/alunoController")
 
-router.get("/", (req, res) => {
-    AlunoDAO.list().then((alunos) => {
-        res.json(sucess(alunos, "list"))
-    })
+router.get("/:lim/:pag", (req, res) => {
+    const {lim, pag} = req.params
+    if (lim == 5 || lim == 10 || lim == 30) {
+        AlunoDAO.list(lim, pag).then((alunos) => {
+            res.json(sucess(alunos, "list"))
+        })
+    }else {
+        res.json(fail("Limite deve ser 5 ou 10 ou 30"));
+    }
 })
 
 router.get("/:id", (req, res) => {
     AlunoDAO.getById(req.params.id).then(aluno => {
         res.json(sucess(aluno))
     }).catch(err => {
-        consol.elog(err)
+        console.log(err)
         res.status(500).json(fail("Não foi possível localizar o aluno"))
     })
 })

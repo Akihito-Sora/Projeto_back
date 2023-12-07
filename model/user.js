@@ -26,8 +26,10 @@ module.exports ={
 
     acesso: async function(id){
         let user = await User.findByPk(id)
-        if (!user) return false;
-        user.nivel_acesso = "true" 
+        if (!user) {
+            return false;
+        }
+        user.nivel_acesso = 1;
         await user.save()
         return user;
     },

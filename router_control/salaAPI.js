@@ -4,17 +4,22 @@ var router = express.Router();
 const {sucess, fail} = require("../helpers/message")
 const SalaDAO = require("../controller/salaController")
 
-router.get("/", (req, res) => {
-    SalaDAO.list().then((Salas) => {
-        res.json(sucess(Salas, "list"))
-    })
+router.get("/:lim/:pag", (req, res) => {
+    const {lim, pag} = req.params
+    if (lim == 5 || lim == 10 || lim == 30) {
+        SalaDAO.list(lim,pag).then((Salas) => {
+            res.json(sucess(Salas, "list"))
+        })
+    }else {
+        res.json(fail("Limite deve ser 5 ou 10 ou 30"));
+    }
 })
 
 router.get("/:id", (req, res) => {
     SalaDAO.getById(req.params.id).then(Sala => {
         res.json(sucess(Sala))
     }).catch(err => {
-        consol.elog(err)
+        console.log(err)
         res.status(500).json(fail("Não foi possível localizar a Sala"))
     })
 })
