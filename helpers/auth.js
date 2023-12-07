@@ -1,24 +1,25 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    validar: (req, res, next) => {
-        const authHeader = req.headers.authorization;
-
-        if (!authHeader) {
-            return res.status(403).send({ error: 'Token não informado' });
+    validaAcesso: (req, res, next) => {
+        let beartoken = req.headers['authorization'] || ""
+        let token = beartoken.split(" ")
+        if (token[0] == 'Bearer') {
+            token = token[1]
         }
-        const token = authHeader.split(' ');
-
-        if (!token.length == 2) {
-            return res.status(403).send({ error: 'Erro na formatação do Token' });
-        }
-        token = token[1]
-
         jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
-            if (err) return res.status(403).send({ error: 'Token invalido' });
-            req.userId = decoded.id;
-            console.log(req.userId);
-            return next();
-        });
+            if (err) res.status(403).json({mensagem: "Token invalido, acesso negado"})
+            else {
+                req.acesso = decoded.usuario.nivel_acesso
+                next()
+            }
+        })
+    }, 
+    permissao:(req, res, next) => {
+        if (req.acesso){
+            next()
+        }else{
+            res.status(403).json({ mensagem: "Acesso negado. Você não tem permissão para acessar este recurso." });
+        }
     }
 }

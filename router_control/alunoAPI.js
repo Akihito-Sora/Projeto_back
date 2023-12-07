@@ -20,7 +20,7 @@ router.get("/:id", (req, res) => {
     })
 })
 
-router.post("/", Auth.validar,(req, res) => {
+router.post("/", Auth.validaAcesso,(req, res) => {
     const {nome} = req.body
     
     AlunoDAO.save(nome).then(aluno => {
@@ -31,7 +31,7 @@ router.post("/", Auth.validar,(req, res) => {
     })
 })
 
-router.put("/:id", Auth.validar, (req, res) => {
+router.put("/:id", Auth.validaAcesso, (req, res) => {
     const {id} = req.params
     const {nome} = req.body
 
@@ -53,7 +53,7 @@ router.put("/:id", Auth.validar, (req, res) => {
     })
 })
 
-router.delete("/:id",Auth.validar, (req, res) => {
+router.delete("/:id",Auth.validaAcesso, (req, res) => {
     AlunoDAO.delete(req.params.id).then(aluno => {
         if (aluno)
             res.json(sucess(aluno))

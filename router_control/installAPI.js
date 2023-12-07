@@ -8,7 +8,7 @@ const professor = require("../controller/professorController")
 const aluno = require("../controller/alunoController")
 const sala = require("../controller/salaController")
 
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     await sequelize.sync({force: true})
     await User.save("user", "senha")
 
