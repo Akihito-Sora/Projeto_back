@@ -5,7 +5,7 @@ const {Op} = require('sequelize');
 module.exports = {
     list: async function() {
         const prof = await Prof.findAll({
-            include:[{ model: Sala, as: 'Sala' }]
+            include:[{ model: Sala }]
         })
         return prof
     },

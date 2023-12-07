@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const Auth = require('../helpers/auth');
 
 const {sucess, fail} = require("../helpers/message")
 const AlunoDAO = require("../controller/alunoController")
@@ -19,7 +20,7 @@ router.get("/:id", (req, res) => {
     })
 })
 
-router.post("/", (req, res) => {
+router.post("/", Auth.validar,(req, res) => {
     const {nome} = req.body
     
     AlunoDAO.save(nome).then(aluno => {
@@ -30,7 +31,7 @@ router.post("/", (req, res) => {
     })
 })
 
-router.put("/:id", (req, res) => {
+router.put("/:id", Auth.validar, (req, res) => {
     const {id} = req.params
     const {nome} = req.body
 
@@ -52,7 +53,7 @@ router.put("/:id", (req, res) => {
     })
 })
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id",Auth.validar, (req, res) => {
     AlunoDAO.delete(req.params.id).then(aluno => {
         if (aluno)
             res.json(sucess(aluno))

@@ -10,7 +10,7 @@ module.exports = {
         const sala = await Sala.findAll({
             include:[
                 { model: Prof, as: 'Prof' },
-                { model: Aluno, as: 'alunos' }
+                { model: Aluno, as: 'alunos', through:{attributes:[]} },
             ]
         })
         return sala

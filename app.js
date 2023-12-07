@@ -5,13 +5,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require("dotenv").config()
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var login = require('./routes/login');
 var aluno = require('./router_control/alunoAPI');
 var prof = require('./router_control/profAPI');
 var sala = require('./router_control/salaAPI');
 var install = require('./router_control/installAPI');
-
 
 require("./helpers/bd")
 
@@ -19,11 +17,8 @@ var app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/login', login);
 app.use('/aluno', aluno);
 app.use('/prof', prof);
 app.use('/sala', sala)
