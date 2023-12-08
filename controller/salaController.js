@@ -42,13 +42,14 @@ module.exports = {
         if (!student) {
             return false;
         }
-        const turma = await Sala.getById(sala.codigo)
+        const turma = await this.getById(sala)
+
         await turma.addAluno(student);
         return turma;
     },
 
     removeAluno: async function (id, aluno) {
-        const sala = this.getById(id);
+        const sala = await this.getById(id);
         if (!sala) {
             return false;
         }

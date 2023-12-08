@@ -4,12 +4,23 @@ var User = require('../model/user')
 const jwt = require('jsonwebtoken');
 const auth = require('../helpers/auth');
 
+const {sucess, fail} = require("../helpers/message")
+
+router.post('/novologin', async function (req, res) {
+  let {usuario, senha} = req.body
+  await User.save(usuario, senha).then(User => {
+    res.json(sucess(User))
+  }).catch(err => {
+    console.log(err)
+    res.status(500).json(fail("Falha ao salvar o novo Usuario"))
+  })
+})
 
 router.post('/',async (req, res) =>{
   let { usuario, senha } = req.body;
   const user = await User.findByName(usuario);
   if (!user) {
-    return res.status(400).send({ status: 0, message: 'Usuario não encontrado', user: {} });
+    return res.redirect('/novologin');
   }
   if (!senha == user.senha) {
     return res.status(400).send({ status: 0, message: 'Usuario ou senha incorreta', user: {} });

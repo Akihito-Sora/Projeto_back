@@ -26,17 +26,12 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
     const {nome, disciplina} = req.body
-/*
-    if (!sala_id) {
-        return res.status(500).json(fail("Falha ao encontrar o Id da Sala"))
-    }else {*/
         ProfessorDAO.save(nome, disciplina).then(Professor => {
             res.json(sucess(Professor))
         }).catch(err => {
             console.log(err)
             res.status(500).json(fail("Falha ao salvar o novo Professor"))
         })
-    //}
 })
 
 router.put("/:id", (req, res) => {

@@ -11,20 +11,32 @@ const sala = require("../controller/salaController")
 router.post('/', async (req, res) => {
     await sequelize.sync({force: true})
     
-    let professores = [];
-    professores.push( await professor.save("teste", "matematica"))
-
+    let professores = ["Adriano", "Back-end","Antonio", "Redes de Computadores","Matheus","SO","Camila","IHC","Cleverson","Empreendedorismo"];
+    let listap = []
+    for (let i = 0; i < professores.length; i += 2) {
+        listap.push( await professor.save(professores[i], professores[i+1]))
+    }
+    
+    let lista = ["Toshio", "Hector", "Maria", "Eduarda", "Gabriela"]
     let alunos =[];
-    alunos.push( await aluno.save("toshio") )
+    for (let i = 0; i <lista.length; i++) {
+        alunos.push( await aluno.save(lista[i]) )
+    }
 
     let salas =[];
-    salas.push(await sala.save(10, "teste", ""));
+    for (let i=0; i < professores.length/2; i++){
+        salas.push(await sala.save( (3+i)*2, professores[i*2]));  
+    }
 
-    let user = await User.save("user", "senha")
-    await User.acesso(user.codigo)
+    for (let i=0; i< 5; i++){
+        await sala.addAlunoToSala(i+1,lista[i])
+    } 
+
+    let user = await User.save("Rivolli", "Password")
+    user = await User.acesso(user.codigo)
 
 
-    res.json({status:true, professores: professores, alunos: alunos, salas:salas});
+    res.json({status:true, professores: listap, alunos: alunos, salas:salas, user:user});
 })
 
 module.exports = router

@@ -24,6 +24,10 @@ app.use('/prof', prof);
 app.use('/sala', sala)
 app.use('/install', install);
 
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger_doc.json')
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
